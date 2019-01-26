@@ -1,0 +1,18 @@
+includes:
+	- /tools/.composer/vendor-bin/phpstan/vendor/phpstan/phpstan-phpunit/extension.neon
+	- /tools/.composer/vendor-bin/phpstan/vendor/jangregor/phpstan-prophecy/src/extension.neon
+
+parameters:
+    #reportUnmatchedIgnoredErrors: false
+
+    tmpDir: %currentWorkingDirectory%/var/phpstan
+    level: max
+    paths:
+        - ./src
+    excludes_analyse:
+        - vendor/
+        - %currentWorkingDirectory%/tests/**
+
+    checkNullables: false # To many false positives
+
+    # ignoreErrors:

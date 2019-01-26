@@ -1,0 +1,53 @@
+{
+    "name": "rollerworks/split-token",
+    "type": "library",
+    "description": "Token-Based Authentication Protocol without Side-Channels",
+    "keywords": [
+        "token",
+        "crypto",
+        "rollerworks"
+    ],
+    "homepage": "https://rollerworks.github.io",
+    "license": "MPL-2.0",
+    "authors": [
+        {
+            "name": "Sebastiaan Stok",
+            "email": "s.stok@rollerscapes.net"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "paragonie/constant_time_encoding": "^2.2",
+        "paragonie/hidden-string": "^1.0",
+        "paragonie/sodium_compat": "^1.8"
+    },
+    "require-dev": {
+        "doctrine/coding-standard": "^5.0",
+        "phpunit/phpunit": "^7.5",
+        "psalm/plugin-phpunit": "^0.3.0"
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Rollerworks\\Component\\SplitToken\\": "src"
+        },
+        "exclude-from-classmap": [
+            "tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rollerworks\\Component\\SplitToken\\Tests\\": "tests"
+        }
+    }
+}
