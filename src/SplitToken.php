@@ -50,7 +50,7 @@ use function sprintf;
  * // Create
  * $splitTokenFactory = ...;
  *
- * $token = $splitTokenFactory->create();
+ * $token = $splitTokenFactory->generate();
  *
  * // The $authToken is to be shared with the receiver (eg. the user) only.
  * // And is URI safe.
