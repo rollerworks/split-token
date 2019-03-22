@@ -73,7 +73,7 @@ $splitTokenFactory = new Argon2SplitTokenFactory();
 
 // Step 1. Create a new SplitToken for usage
 
-$token = $splitTokenFactory->create();
+$token = $splitTokenFactory->generate();
 
 // The $authToken holds a \ParagonIE\HiddenString\HiddenString to prevent
 // leakage of this value. You need to cast this object to an actual string
@@ -90,7 +90,7 @@ $authToken = $token->token(); // Returns a \ParagonIE\HiddenString\HiddenString 
 // Indicate when the token must expire. Note that you need to clear the token from storage yourself.
 // Pass null (or leave this method call absent) to never expire the token (not recommended).
 //
-$authToken->expiresAt(new \DateTimeImmutable('+1 hour'));
+$authToken->expireAt(new \DateTimeImmutable('+1 hour'));
 
 // Now to store the token cast the SplitToken to a SplitTokenValueHolder object.
 //
