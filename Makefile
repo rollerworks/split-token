@@ -2,8 +2,8 @@ ifndef BUILD_ENV
 BUILD_ENV=php7.2
 endif
 
-QA_DOCKER_IMAGE=parkmanager/phpqa:latest
-QA_DOCKER_COMMAND=docker run --init --interactive --tty --rm --env "COMPOSER_HOME=/composer" --user "$(shell id -u):$(shell id -g)" --volume /tmp/tmp-phpqa-$(shell id -u):/tmp:delegated --volume "$(shell pwd):/project:delegated" --volume "${HOME}/.composer:/composer:delegated" --workdir /project ${QA_DOCKER_IMAGE}
+QA_DOCKER_IMAGE=jakzal/phpqa:1.34.1-php7.4-alpine
+QA_DOCKER_COMMAND=docker run --init -t --rm --user "$(shell id -u):$(shell id -g)" --env "COMPOSER_HOME=/composer" --volume /tmp/tmp-phpqa-$(shell id -u):/tmp:delegated --volume "$(shell pwd):/project:delegated" --volume "${HOME}/.composer:/composer:delegated" --workdir /project ${QA_DOCKER_IMAGE}
 
 install: composer-install
 dist: composer-validate cs phpstan psalm test

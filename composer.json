@@ -16,15 +16,15 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": ">=7.2",
         "paragonie/constant_time_encoding": "^2.2",
         "paragonie/hidden-string": "^1.0",
         "paragonie/sodium_compat": "^1.8"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^5.0",
-        "phpunit/phpunit": "^7.5",
-        "psalm/plugin-phpunit": "^0.3.0"
+        "doctrine/coding-standard": "^8.0",
+        "phpunit/phpunit": "^7.5 || ^8.5",
+        "psalm/plugin-phpunit": "^0.13.0"
     },
     "config": {
         "preferred-install": {
