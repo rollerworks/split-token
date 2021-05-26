@@ -18,7 +18,7 @@
     "require": {
         "php": ">=7.2",
         "paragonie/constant_time_encoding": "^2.2",
-        "paragonie/hidden-string": "^1.0",
+        "paragonie/hidden-string": "^1.0 || ^2.0",
         "paragonie/sodium_compat": "^1.8"
     },
     "require-dev": {
