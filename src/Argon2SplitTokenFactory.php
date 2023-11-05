@@ -10,12 +10,10 @@ declare(strict_types=1);
 
 namespace Rollerworks\Component\SplitToken;
 
-use DateTimeImmutable;
 use ParagonIE\HiddenString\HiddenString;
-use function random_bytes;
 
 /**
- * Uses (Lib)sodium Argon2i(d) for hashing the SplitToken verifier.
+ * Uses sodium Argon2id for hashing the SplitToken verifier.
  *
  * Configuration accepts the following (all integer):
  *
@@ -28,12 +26,10 @@ final class Argon2SplitTokenFactory implements SplitTokenFactory
     private $config;
     private $defaultExpirationTimestamp;
 
-    /**
-     * @param int[] $config
-     */
-    public function __construct(array $config = [], ?DateTimeImmutable $defaultExpirationTimestamp = null)
+    /** @param array{'memory_cost'|'time_cost'|'threads': int} $config */
+    public function __construct(array $config = [], \DateTimeImmutable $defaultExpirationTimestamp = null)
     {
-        $this->config                     = $config;
+        $this->config = $config;
         $this->defaultExpirationTimestamp = $defaultExpirationTimestamp;
     }
 

@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace Rollerworks\Component\SplitToken;
 
-use DateTimeImmutable;
-
 /**
  * SplitToken keeps SplitToken information for storage.
  *
@@ -34,12 +32,12 @@ final class SplitTokenValueHolder
     private $expiresAt;
     private $metadata = [];
 
-    public function __construct(string $selector, string $verifierHash, ?DateTimeImmutable $expiresAt = null, array $metadata = [])
+    public function __construct(string $selector, string $verifierHash, \DateTimeImmutable $expiresAt = null, array $metadata = [])
     {
-        $this->selector     = $selector;
+        $this->selector = $selector;
         $this->verifierHash = $verifierHash;
-        $this->expiresAt    = $expiresAt;
-        $this->metadata     = $metadata;
+        $this->expiresAt = $expiresAt;
+        $this->metadata = $metadata;
     }
 
     public static function isEmpty(?self $valueHolder): bool
@@ -90,16 +88,16 @@ final class SplitTokenValueHolder
         return $this->metadata ?? [];
     }
 
-    public function isExpired(?DateTimeImmutable $datetime = null): bool
+    public function isExpired(\DateTimeImmutable $datetime = null): bool
     {
         if ($this->expiresAt === null) {
             return false;
         }
 
-        return $this->expiresAt->getTimestamp() < ($datetime ?? new DateTimeImmutable())->getTimestamp();
+        return $this->expiresAt->getTimestamp() < ($datetime ?? new \DateTimeImmutable())->getTimestamp();
     }
 
-    public function expiresAt(): ?DateTimeImmutable
+    public function expiresAt(): ?\DateTimeImmutable
     {
         return $this->expiresAt;
     }
@@ -111,8 +109,8 @@ final class SplitTokenValueHolder
      */
     public function equals(self $other): bool
     {
-        return $other->selector === $this->selector &&
-               $other->verifierHash === $this->verifierHash &&
-               $other->metadata === $this->metadata;
+        return $other->selector === $this->selector
+               && $other->verifierHash === $this->verifierHash
+               && $other->metadata === $this->metadata;
     }
 }
