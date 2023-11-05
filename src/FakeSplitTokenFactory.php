@@ -17,7 +17,7 @@ use ParagonIE\HiddenString\HiddenString;
  *
  * !! THIS IMPLEMENTATION IS NOT SECURE, USE ONLY FOR TESTING !!
  */
-final class FakeSplitTokenFactory implements SplitTokenFactory
+final class FakeSplitTokenFactory extends AbstractSplitTokenFactory
 {
     public const SELECTOR = '1zUeXUvr4LKymANBB_bLEqiP5GPr-Pha';
     public const VERIFIER = '_OR6OOnV1o8Vy_rWhDoxKNIt';
@@ -25,24 +25,23 @@ final class FakeSplitTokenFactory implements SplitTokenFactory
 
     private $randomValue;
 
-    public static function instance(string $randomValue = null): self
-    {
-        return new self($randomValue);
-    }
-
     public static function randomInstance(): self
     {
         return new self(random_bytes(FakeSplitToken::TOKEN_DATA_LENGTH));
     }
 
-    public function __construct(string $randomValue = null)
+    public function __construct(string $randomValue = null, \DateInterval | string | null $defaultLifeTime = null)
     {
+        parent::__construct($defaultLifeTime);
+
         $this->randomValue = $randomValue ?? hex2bin('d7351e5d4bebe0b2b298034107f6cb12a88fe463ebf8f85afce47a38e9d5d68f15cbfad6843a3128d22d');
     }
 
-    public function generate(): SplitToken
+    public function generate(\DateTimeImmutable | \DateInterval $expiresAt = null): SplitToken
     {
-        return FakeSplitToken::create(new HiddenString($this->randomValue, false, true));
+        $splitToken = FakeSplitToken::create(new HiddenString($this->randomValue, false, true));
+
+        return $splitToken->expireAt($this->getExpirationTimestamp($expiresAt));
     }
 
     public function fromString(string $token): SplitToken

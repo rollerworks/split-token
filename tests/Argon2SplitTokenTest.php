@@ -33,12 +33,39 @@ final class Argon2SplitTokenTest extends TestCase
     }
 
     #[Test]
-    public function it_validates_the_correct_length()
+    public function it_validates_the_correct_length_less()
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Invalid token-data provided, expected exactly 42 bytes.');
 
         SplitToken::create(new HiddenString('NanananaBatNan', false, true));
+    }
+
+    #[Test]
+    public function it_validates_the_correct_length_more()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Invalid token-data provided, expected exactly 42 bytes.');
+
+        SplitToken::create(new HiddenString('NanananaBatNanNanananaBatNanNanananaBatNanNanananaBatNanNanananaBatNan', false, true));
+    }
+
+    #[Test]
+    public function it_validates_the_correct_length_from_string_less()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Invalid token provided.');
+
+        SplitToken::fromString('NanananaBatNan');
+    }
+
+    #[Test]
+    public function it_validates_the_correct_length_from_string_more()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Invalid token provided.');
+
+        SplitToken::fromString('NanananaBatNanNanananaBatNanNanananaBatNanNanananaBatNanNanananaBatNan');
     }
 
     #[Test]
@@ -82,7 +109,7 @@ final class Argon2SplitTokenTest extends TestCase
     }
 
     #[Test]
-    public function it_produces_a__split_token_value_holder()
+    public function it_produces_a_split_token_value_holder()
     {
         $splitToken = SplitToken::create(self::$randValue);
 
@@ -96,7 +123,7 @@ final class Argon2SplitTokenTest extends TestCase
     }
 
     #[Test]
-    public function it_produces_a__split_token_value_holder_with_metadata()
+    public function it_produces_a_split_token_value_holder_with_metadata()
     {
         $splitToken = SplitToken::create(self::$randValue);
         $value = $splitToken->toValueHolder(['he' => 'now']);
@@ -106,7 +133,7 @@ final class Argon2SplitTokenTest extends TestCase
     }
 
     #[Test]
-    public function it_produces_a__split_token_value_holder_with_expiration()
+    public function it_produces_a_split_token_value_holder_with_expiration()
     {
         $date = new \DateTimeImmutable('+5 minutes');
         $splitToken = SplitToken::create($fullToken = self::$randValue)->expireAt($date);
@@ -137,7 +164,7 @@ final class Argon2SplitTokenTest extends TestCase
     }
 
     #[Test]
-    public function it_verifies__split_token()
+    public function it_verifies_split_token()
     {
         // Stored.
         $splitTokenHolder = SplitToken::create(self::$randValue)->toValueHolder();
@@ -149,7 +176,7 @@ final class Argon2SplitTokenTest extends TestCase
     }
 
     #[Test]
-    public function it_verifies__split_token_from_string_and_no_current_token_set()
+    public function it_verifies_split_token_from_string_and_no_current_token_set()
     {
         $fromString = SplitToken::fromString(self::FULL_TOKEN);
 
@@ -157,7 +184,7 @@ final class Argon2SplitTokenTest extends TestCase
     }
 
     #[Test]
-    public function it_verifies__split_token_from_string_selector()
+    public function it_verifies_split_token_from_string_selector()
     {
         // Stored.
         $splitTokenHolder = SplitToken::create(self::$randValue)->toValueHolder();
@@ -170,7 +197,7 @@ final class Argon2SplitTokenTest extends TestCase
     }
 
     #[Test]
-    public function it_verifies__split_token_from_string_with_expiration()
+    public function it_verifies_split_token_from_string_with_expiration()
     {
         // Stored.
         $splitTokenHolder = SplitToken::create(self::$randValue)

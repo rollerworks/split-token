@@ -18,12 +18,14 @@
     "require": {
         "php": ">=8.2",
         "paragonie/constant_time_encoding": "^2.6",
-        "paragonie/hidden-string": "^2.0"
+        "paragonie/hidden-string": "^2.0",
+        "psr/clock": "^1.0"
     },
     "require-dev": {
         "doctrine/instantiator": "^2.0",
         "phpunit/phpunit": "^10.4",
-        "rollerscapes/standards": "^1.0"
+        "rollerscapes/standards": "^1.0",
+        "symfony/clock": "^6.3"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

@@ -21,31 +21,23 @@ use ParagonIE\HiddenString\HiddenString;
  * 'time_cost'   amount of time that Argon2lib will spend trying to compute a hash.
  * 'threads'     number of threads that Argon2lib will use.
  */
-final class Argon2SplitTokenFactory implements SplitTokenFactory
+final class Argon2SplitTokenFactory extends AbstractSplitTokenFactory
 {
-    private $config;
-    private $defaultExpirationTimestamp;
-
-    /** @param array{'memory_cost'|'time_cost'|'threads': int} $config */
-    public function __construct(array $config = [], \DateTimeImmutable $defaultExpirationTimestamp = null)
+    /** @param array<string, int> $config */
+    public function __construct(private array $config = [], \DateInterval | string | null $defaultLifeTime = null)
     {
-        $this->config = $config;
-        $this->defaultExpirationTimestamp = $defaultExpirationTimestamp;
+        parent::__construct($defaultLifeTime);
     }
 
-    public function generate(): SplitToken
+    public function generate(\DateTimeImmutable | \DateInterval $expiresAt = null): SplitToken
     {
         $splitToken = Argon2SplitToken::create(
             // DO NOT ENCODE HERE (always provide as raw binary)!
-            new HiddenString(random_bytes((int) SplitToken::TOKEN_CHAR_LENGTH), false, true),
+            new HiddenString(random_bytes(SplitToken::TOKEN_DATA_LENGTH), false, true),
             $this->config
         );
 
-        if ($this->defaultExpirationTimestamp !== null) {
-            $splitToken->expireAt($this->defaultExpirationTimestamp);
-        }
-
-        return $splitToken;
+        return $splitToken->expireAt($this->getExpirationTimestamp($expiresAt));
     }
 
     public function fromString(string $token): SplitToken

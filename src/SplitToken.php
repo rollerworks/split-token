@@ -84,10 +84,11 @@ use ParagonIE\HiddenString\HiddenString;
  */
 abstract class SplitToken
 {
-    public const SELECTOR_BYTES = 24;
-    public const VERIFIER_BYTES = 18;
-    public const TOKEN_DATA_LENGTH = (self::VERIFIER_BYTES + self::SELECTOR_BYTES);
-    public const TOKEN_CHAR_LENGTH = (self::SELECTOR_BYTES * 4 / 3) + (self::VERIFIER_BYTES * 4 / 3);
+    final public const SELECTOR_BYTES = 24;
+    final public const VERIFIER_BYTES = 18;
+    final public const SELECTOR_LENGTH = 32; // Produced by SELECTOR_BYTES base64-encoded
+    final public const TOKEN_DATA_LENGTH = (self::VERIFIER_BYTES + self::SELECTOR_BYTES);
+    final public const TOKEN_CHAR_LENGTH = ((self::SELECTOR_BYTES * 4) / 3) + ((self::VERIFIER_BYTES * 4) / 3);
 
     /** @var array<string, mixed> */
     protected array $config = [];
@@ -116,7 +117,7 @@ abstract class SplitToken
     {
         $bytesString = $randomBytes->getString();
 
-        if (Binary::safeStrlen($bytesString) < self::TOKEN_DATA_LENGTH) {
+        if (Binary::safeStrlen($bytesString) !== self::TOKEN_DATA_LENGTH) {
             // Don't zero memory as the value is invalid.
             throw new \RuntimeException(sprintf('Invalid token-data provided, expected exactly %s bytes.', self::TOKEN_DATA_LENGTH));
         }
@@ -151,13 +152,13 @@ abstract class SplitToken
      */
     final public static function fromString(string $token): static
     {
-        if (Binary::safeStrlen($token) < self::TOKEN_CHAR_LENGTH) {
+        if (Binary::safeStrlen($token) !== self::TOKEN_CHAR_LENGTH) {
             // Don't zero memory as the value is invalid.
             throw new \RuntimeException('Invalid token provided.');
         }
 
-        $selector = Binary::safeSubstr($token, 0, 32);
-        $verifier = Binary::safeSubstr($token, 32);
+        $selector = Binary::safeSubstr($token, 0, self::SELECTOR_LENGTH);
+        $verifier = Binary::safeSubstr($token, self::SELECTOR_LENGTH);
 
         $instance = new static(new HiddenString($token), $selector, $verifier);
         // Don't generate hash, as the verifier needs the salt of the stored hash.
