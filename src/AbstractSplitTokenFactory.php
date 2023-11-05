@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Rollerworks\Component\SplitToken;
 
 use Psr\Clock\ClockInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class AbstractSplitTokenFactory implements SplitTokenFactory
 {

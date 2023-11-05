@@ -34,9 +34,7 @@ final class Argon2SplitToken extends SplitToken
         return password_verify($verifier, $hash);
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
+    /** @codeCoverageIgnore */
     protected function hashVerifier(string $verifier): string
     {
         $passwordHash = password_hash($verifier, \PASSWORD_ARGON2ID, $this->config);

@@ -30,7 +30,7 @@ final class FakeSplitTokenFactory extends AbstractSplitTokenFactory
         return new self(random_bytes(FakeSplitToken::TOKEN_DATA_LENGTH));
     }
 
-    public function __construct(string $randomValue = null, \DateInterval | string | null $defaultLifeTime = null)
+    public function __construct(string $randomValue = null, \DateInterval | string $defaultLifeTime = null)
     {
         parent::__construct($defaultLifeTime);
 
@@ -39,9 +39,8 @@ final class FakeSplitTokenFactory extends AbstractSplitTokenFactory
 
     public function generate(\DateTimeImmutable | \DateInterval $expiresAt = null): SplitToken
     {
-        $splitToken = FakeSplitToken::create(new HiddenString($this->randomValue, false, true));
-
-        return $splitToken->expireAt($this->getExpirationTimestamp($expiresAt));
+        return FakeSplitToken::create(new HiddenString($this->randomValue, false, true))
+            ->expireAt($this->getExpirationTimestamp($expiresAt));
     }
 
     public function fromString(string $token): SplitToken

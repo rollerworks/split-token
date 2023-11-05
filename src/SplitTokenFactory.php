@@ -11,9 +11,14 @@ declare(strict_types=1);
 namespace Rollerworks\Component\SplitToken;
 
 use ParagonIE\HiddenString\HiddenString;
+use Psr\Clock\ClockInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 interface SplitTokenFactory
 {
+    #[Required]
+    public function setClock(ClockInterface $clock): void;
+
     /**
      * Generates a new SplitToken object.
      *
