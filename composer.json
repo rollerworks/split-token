@@ -22,9 +22,7 @@
         "paragonie/sodium_compat": "^1.8"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^8.0",
-        "phpunit/phpunit": "^7.5 || ^8.5",
-        "psalm/plugin-phpunit": "^0.13.0"
+        "phpunit/phpunit": "^7.5 || ^8.5"
     },
     "config": {
         "preferred-install": {

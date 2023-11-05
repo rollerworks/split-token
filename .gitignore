@@ -1,5 +1,4 @@
 /vendor/
 /composer.lock
-/phpcs.xml
 /var/
 .phpunit.result.cache
