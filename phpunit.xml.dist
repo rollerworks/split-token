@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="vendor/autoload.php"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutTodoAnnotatedTests="true"
-
-         convertErrorsToExceptions="false"
-         convertWarningsToExceptions="false"
-         convertNoticesToExceptions="false"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
+    bootstrap="vendor/autoload.php"
+    colors="true"
+    failOnWarning="true"
+    beStrictAboutOutputDuringTests="true"
 >
     <testsuites>
-        <testsuite name="Rollerworks SplitToken Test Suite">
-            <directory>tests/</directory>
+        <testsuite name="Test Suite">
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
-
     <php>
         <ini name="error_reporting" value="-1" />
+        <env name="SYMFONY_PHPUNIT_VERSION" value="10.4" />
     </php>
 
-    <filter>
-        <whitelist>
+    <coverage />
+    <source>
+        <include>
             <directory>src/</directory>
-            <exclude>
-                <directory>vendor/</directory>
-                <directory>tests/</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+        </include>
+        <exclude>
+            <directory>vendor/</directory>
+            <directory>tests/</directory>
+        </exclude>
+    </source>
 </phpunit>

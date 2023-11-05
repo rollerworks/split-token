@@ -1,40 +1,32 @@
 {
     "name": "rollerworks/split-token",
-    "type": "library",
     "description": "Token-Based Authentication Protocol without Side-Channels",
+    "license": "MPL-2.0",
+    "type": "library",
     "keywords": [
         "token",
         "crypto",
         "rollerworks"
     ],
-    "homepage": "https://rollerworks.github.io",
-    "license": "MPL-2.0",
     "authors": [
         {
             "name": "Sebastiaan Stok",
             "email": "s.stok@rollerscapes.net"
         }
     ],
+    "homepage": "https://rollerworks.github.io",
     "require": {
-        "php": ">=7.2",
-        "paragonie/constant_time_encoding": "^2.2",
-        "paragonie/hidden-string": "^1.0 || ^2.0",
-        "paragonie/sodium_compat": "^1.8"
+        "php": ">=8.2",
+        "paragonie/constant_time_encoding": "^2.6",
+        "paragonie/hidden-string": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.5 || ^8.5"
+        "doctrine/instantiator": "^2.0",
+        "phpunit/phpunit": "^10.4",
+        "rollerscapes/standards": "^1.0"
     },
-    "config": {
-        "preferred-install": {
-            "*": "dist"
-        },
-        "sort-packages": true
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-main": "0.1-dev"
-        }
-    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Rollerworks\\Component\\SplitToken\\": "src"
@@ -46,6 +38,14 @@
     "autoload-dev": {
         "psr-4": {
             "Rollerworks\\Component\\SplitToken\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0-dev"
         }
     }
 }

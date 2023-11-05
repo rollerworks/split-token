@@ -91,7 +91,7 @@ final class Argon2SplitTokenTest extends TestCase
             'threads' => 1,
         ]);
 
-        self::assertRegExp('/^\$argon2[id]+\$v=19\$m=512,t=1,p=1/', $token = $splitToken->toValueHolder()->verifierHash());
+        self::assertMatchesRegularExpression('/^\$argon2[id]+\$v=19\$m=512,t=1,p=1/', $splitToken->toValueHolder()->verifierHash());
     }
 
     /**
