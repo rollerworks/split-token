@@ -60,7 +60,20 @@ use Rollerworks\Component\SplitToken\Argon2SplitTokenFactory;
 // the FakeSplitTokenFactory instead as cryptographic operations
 // can a little heavy.
 
-$splitTokenFactory = new Argon2SplitTokenFactory();
+// Default configuration, shown here for clarity.
+$config = [
+    'memory_cost' => \PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
+    'time_cost' => \PASSWORD_ARGON2_DEFAULT_TIME_COST,
+    'threads' => \PASSWORD_ARGON2_DEFAULT_THREADS,
+];
+
+// Either a DateInterval or a DateInterval parsable-string
+$defaultLifeTime = null;
+
+$splitTokenFactory = new Argon2SplitTokenFactory(/*config: $config, */ $defaultLifeTime);
+
+// Optionally set PSR/Clock compatible instance
+// $splitTokenFactory->setClock();
 
 // Step 1. Create a new SplitToken for usage
 
@@ -81,6 +94,7 @@ $authToken = $token->token(); // Returns a \ParagonIE\HiddenString\HiddenString 
 // Indicate when the token must expire. Note that you need to clear the token from storage yourself.
 // Pass null (or leave this method call absent) to never expire the token (not recommended).
 //
+// If not provided uses "now" + $defaultLifeTime of the factory constructor.
 $authToken->expireAt(new \DateTimeImmutable('+1 hour'));
 
 // Now to store the token cast the SplitToken to a SplitTokenValueHolder object.
