@@ -24,7 +24,7 @@ use ParagonIE\HiddenString\HiddenString;
 final class Argon2SplitTokenFactory extends AbstractSplitTokenFactory
 {
     /** @param array<string, int> $config */
-    public function __construct(private array $config = [], \DateInterval | string | null $defaultLifeTime = null)
+    public function __construct(private array $config = [], \DateInterval | string $defaultLifeTime = null)
     {
         parent::__construct($defaultLifeTime);
     }

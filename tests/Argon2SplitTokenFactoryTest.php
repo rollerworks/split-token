@@ -62,6 +62,7 @@ final class Argon2SplitTokenFactoryTest extends TestCase
 
     private static function assertExpirationEquals(string $expected, SplitToken $actual): void
     {
+        self::assertNotNull($actual->getExpirationTime());
         self::assertSame($expected, $actual->getExpirationTime()->format('Y-m-d\TH:i:s'));
     }
 

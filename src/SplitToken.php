@@ -98,7 +98,7 @@ abstract class SplitToken
     private ?string $verifierHash = null;
     private ?\DateTimeImmutable $expiresAt = null;
 
-    private function __construct(HiddenString $token, string $selector, string $verifier)
+    final private function __construct(HiddenString $token, string $selector, string $verifier)
     {
         $this->token = $token;
         $this->selector = $selector;
@@ -189,7 +189,7 @@ abstract class SplitToken
      */
     final public function matches(?SplitTokenValueHolder $token): bool
     {
-        if (SplitTokenValueHolder::isEmpty($token)) {
+        if ($token === null || SplitTokenValueHolder::isEmpty($token)) {
             return false;
         }
 
@@ -235,6 +235,8 @@ abstract class SplitToken
     /**
      * This method is called in create() before the verifier is hashed,
      * allowing to set-up configuration for the hashing method.
+     *
+     * @param array<string, mixed> $config
      */
     protected function configureHasher(array $config): void
     {

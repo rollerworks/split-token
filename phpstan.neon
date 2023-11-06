@@ -1,6 +1,6 @@
 includes:
     - vendor/rollerscapes/standards/phpstan.neon
-    #- phpstan-baseline.neon
+    - phpstan-baseline.neon
 
 parameters:
     #reportUnmatchedIgnoredErrors: false
@@ -13,4 +13,5 @@ parameters:
         - templates/
         - translations/
 
-    #ignoreErrors:
+    ignoreErrors:
+        - '#Attribute class Symfony\\Contracts\\Service\\Attribute\\Required does not exist#' # Not required

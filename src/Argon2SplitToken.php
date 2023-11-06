@@ -37,10 +37,10 @@ final class Argon2SplitToken extends SplitToken
     /** @codeCoverageIgnore */
     protected function hashVerifier(string $verifier): string
     {
-        $passwordHash = password_hash($verifier, \PASSWORD_ARGON2ID, $this->config);
-
-        if ($passwordHash === false || $passwordHash === null) {
-            throw new \RuntimeException('Unrecoverable password hashing error.');
+        try {
+            $passwordHash = password_hash($verifier, \PASSWORD_ARGON2ID, $this->config);
+        } catch (\Throwable $e) {
+            throw new \RuntimeException('Unrecoverable password hashing error.', 0, $e);
         }
 
         return $passwordHash;
