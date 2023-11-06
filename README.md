@@ -3,12 +3,13 @@ Rollerworks SplitToken Component
 
 SplitToken provides a Token-Based Authentication Protocol without Side-Channels.
 
-This technique is based of [Split Tokens: Token-Based Authentication Protocols without Side-Channels](https://paragonie.com/blog/2017/02/split-tokens-token-based-authentication-protocols-without-side-channels).
+This technique is based of [Split Tokens: Token-Based Authentication Protocols without Side-Channels].
+Which was first proposed by Paragon Initiative Enterprises.
 
 SplitToken-Based Authentication is best used for password resetting or one-time
-single-logon. 
+single-logon.
 
-While possible, this technique is not recommended as a replacement for 
+While possible, this technique is not recommended as a replacement for
 OAuth or Json Web Tokens.
 
 ## Introduction
@@ -22,45 +23,35 @@ of two parts: The **selector** (used in the query) and the **verifier**
 
 * The verifier works as a password and is only provided to the user,
   the database only holds a salted (cryptographic) hash of the verifier.
-  
+
   The length of this value is heavily dependent on the used hashing algorithm
   and should not be hardcoded.
-  
-The full token is provided to the user or recipient and functions as a combined 
+
+The full token is provided to the user or recipient and functions as a combined
 identifier (selector) and password (verifier).
 
 **Caution: You NEVER store the full token as-is!** You only store the selector,
 and a (cryptographic) hash of the verifier.
 
-## Requirements
-
-PHP 7.2 with the (lib)sodium extension enabled.
-
 ## Installation
 
-To install this package, add `rollerworks/split-token` to your composer.json
+To install this package, add `rollerworks/split-token` to your composer.json:
 
 ```bash
 $ php composer.phar require rollerworks/split-token
 ```
 
-Now, Composer will automatically download all required files, and install them
-for you.
+Now, [Composer][composer] will automatically download all required files,
+and install them for you.
 
-**Caution:** There is no stable version of this library yet, while no major changes
-are expected you are advised to upgrade as soon as possible when a new version is 
-released. 
+## Requirements
 
-Update your `composer.json` file manually to require the latest version 
-(avoid using the `dev-master`).
+PHP 8.1 with the sodium extension enabled (default since PHP 8).
 
 ## Basic Usage
 
 ```php
 <?php
-
-require 'vendor/autoload.php';
-
 use Rollerworks\Component\SplitToken\Argon2SplitTokenFactory;
 
 // First, create the factory to generate a new SplitToken.
@@ -69,7 +60,20 @@ use Rollerworks\Component\SplitToken\Argon2SplitTokenFactory;
 // the FakeSplitTokenFactory instead as cryptographic operations
 // can a little heavy.
 
-$splitTokenFactory = new Argon2SplitTokenFactory();
+// Default configuration, shown here for clarity.
+$config = [
+    'memory_cost' => \PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
+    'time_cost' => \PASSWORD_ARGON2_DEFAULT_TIME_COST,
+    'threads' => \PASSWORD_ARGON2_DEFAULT_THREADS,
+];
+
+// Either a DateInterval or a DateInterval parsable-string
+$defaultLifeTime = null;
+
+$splitTokenFactory = new Argon2SplitTokenFactory(/*config: $config, */ $defaultLifeTime);
+
+// Optionally set PSR/Clock compatible instance
+// $splitTokenFactory->setClock();
 
 // Step 1. Create a new SplitToken for usage
 
@@ -84,18 +88,19 @@ $token = $splitTokenFactory->generate();
 //
 //
 // AGAIN, DO NOT STORE "THIS" VALUE IN THE DATABASE! Store the selector and verifier-hash instead.
-// 
+//
 $authToken = $token->token(); // Returns a \ParagonIE\HiddenString\HiddenString object
 
 // Indicate when the token must expire. Note that you need to clear the token from storage yourself.
 // Pass null (or leave this method call absent) to never expire the token (not recommended).
 //
+// If not provided uses "now" + $defaultLifeTime of the factory constructor.
 $authToken->expireAt(new \DateTimeImmutable('+1 hour'));
 
 // Now to store the token cast the SplitToken to a SplitTokenValueHolder object.
 //
 // Unlike SplitToken this class is final and doesn't hold the full-token string.
-// 
+//
 // Additionally you store the token with metadata (array only),
 // See the linked manual below for more information.
 $holder = $token->toValueHolder();
@@ -107,7 +112,7 @@ $holder = $token->toValueHolder();
 //   recovery_selector = $holder->selector(),
 //   recovery_verifier = $holder->verifierHash(),
 //   recovery_expires_at = $holder->expiresAt(),
-//   recovery_metadata = serialize($holder->metadata()),
+//   recovery_metadata = json_encode($holder->metadata()),
 //   recovery_timestamp = NOW()
 // WHERE user_id = ...
 
@@ -121,18 +126,18 @@ $holder = $token->toValueHolder();
 $token = $splitTokenFactory->fromString($_GET['token']);
 
 // $result = SELECT user_id, recover_verifier, recovery_expires_at, recovery_metadata WHERE recover_selector = $token->selector()
-$holder = new SplitTokenValueHolder($token->selector(), $result['recovery_verifier'], $result['recovery_expires_at'], unserialize($result['recovery_metadata'], ['allowed_classes' => false]));
+$holder = new SplitTokenValueHolder($token->selector(), $result['recovery_verifier'], $result['recovery_expires_at'], json_decode($result['recovery_metadata'], true));
 
 if ($token->matches($holder)) {
     echo 'OK, you have access';
 } else {
     // Note: Make sure to remove the token from storage.
-    
+
     echo 'NO, I cannot let you do this John.';
 }
 ```
 
-Once a result is found using the selector, the stored verifier-hash is used to 
+Once a result is found using the selector, the stored verifier-hash is used to
 compute a matching hash of the provided verifier. And the values are compared
 in constant-time to protect against side-channel attacks.
 
@@ -147,7 +152,7 @@ in constant-time to protect against side-channel attacks.
 Because of security reasons, a `SplitToken` only throws generic runtime
 exceptions for wrong usage, but no detailed exceptions about invalid input.
 
-In the case of an error the memory allocation of the verifier and full token 
+In the case of an error the memory allocation of the verifier and full token
 is zeroed to prevent leakage during a core dump or unhandled exception.
 
 ## Versioning
@@ -178,3 +183,8 @@ The Split Token idea was first proposed by Paragon Initiative Enterprises.
 
 The Source Code of this package is subject to the terms of the
 Mozilla Public License, version 2.0 ([MPLv2.0 License](LICENSE)).
+
+Which can be safely used with any other license including MIT
+and GNU GPL.
+
+[Split Tokens: Token-Based Authentication Protocols without Side-Channels]: https://paragonie.com/blog/2017/02/split-tokens-token-based-authentication-protocols-without-side-channels

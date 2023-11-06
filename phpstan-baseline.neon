@@ -1,0 +1,16 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$hash of method Rollerworks\\\\Component\\\\SplitToken\\\\SplitToken\\:\\:verifyHash\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/SplitToken.php
+
+		-
+			message: "#^Parameter \\#1 \\$selector of class Rollerworks\\\\Component\\\\SplitToken\\\\SplitTokenValueHolder constructor expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/SplitTokenValueHolder.php
+
+		-
+			message: "#^Parameter \\#2 \\$verifierHash of class Rollerworks\\\\Component\\\\SplitToken\\\\SplitTokenValueHolder constructor expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/SplitTokenValueHolder.php

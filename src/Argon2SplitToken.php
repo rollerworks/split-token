@@ -10,24 +10,20 @@ declare(strict_types=1);
 
 namespace Rollerworks\Component\SplitToken;
 
-use RuntimeException;
-use const PASSWORD_ARGON2_DEFAULT_MEMORY_COST;
-use const PASSWORD_ARGON2_DEFAULT_THREADS;
-use const PASSWORD_ARGON2_DEFAULT_TIME_COST;
-use const PASSWORD_ARGON2I;
-use function array_merge;
-use function password_hash;
-use function password_verify;
-
+/**
+ * Don't create this class directly, use {@see Argon2SplitTokenFactory}
+ * to create a new instance instead.
+ */
 final class Argon2SplitToken extends SplitToken
 {
-    protected function configureHasher(array $config = [])
+    /** @param array<string, int> $config */
+    protected function configureHasher(array $config = []): void
     {
         $this->config = array_merge(
             [
-                'memory_cost' => PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
-                'time_cost' => PASSWORD_ARGON2_DEFAULT_TIME_COST,
-                'threads' => PASSWORD_ARGON2_DEFAULT_THREADS,
+                'memory_cost' => \PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
+                'time_cost' => \PASSWORD_ARGON2_DEFAULT_TIME_COST,
+                'threads' => \PASSWORD_ARGON2_DEFAULT_THREADS,
             ],
             $config
         );
@@ -38,12 +34,13 @@ final class Argon2SplitToken extends SplitToken
         return password_verify($verifier, $hash);
     }
 
+    /** @codeCoverageIgnore */
     protected function hashVerifier(string $verifier): string
     {
-        $passwordHash = password_hash($verifier, PASSWORD_ARGON2I, $this->config);
-
-        if ($passwordHash === false) {
-            throw new RuntimeException('Unrecoverable password hashing error.');
+        try {
+            $passwordHash = password_hash($verifier, \PASSWORD_ARGON2ID, $this->config);
+        } catch (\Throwable $e) {
+            throw new \RuntimeException('Unrecoverable password hashing error.', 0, $e);
         }
 
         return $passwordHash;

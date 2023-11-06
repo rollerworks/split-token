@@ -10,9 +10,15 @@ declare(strict_types=1);
 
 namespace Rollerworks\Component\SplitToken;
 
+use ParagonIE\HiddenString\HiddenString;
+use Psr\Clock\ClockInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 interface SplitTokenFactory
 {
+    #[Required]
+    public function setClock(ClockInterface $clock): void;
+
     /**
      * Generates a new SplitToken object.
      *
@@ -20,17 +26,19 @@ interface SplitTokenFactory
      *
      * ```
      * return SplitToken::create(
-     *     new HiddenString(\random_bytes(SplitToken::TOKEN_CHAR_LENGTH), false, true), // DO NOT ENCODE HERE (always provide as raw binary)!
+     *     // DO NOT ENCODE HERE (always provide the random data as raw binary)!
+     *     new HiddenString(\random_bytes(SplitToken::TOKEN_CHAR_LENGTH), false, true),
      *     $id
      * );
      * ```
      *
-     * @see \ParagonIE\Halite\HiddenString
+     * @see HiddenString
      */
-    public function generate(): SplitToken;
+    public function generate(\DateTimeImmutable | \DateInterval $expiresAt = null): SplitToken;
 
     /**
-     * Recreates a SplitToken object from a HiddenString (provided by eg. a user).
+     * Recreates a SplitToken object from a token-string
+     * (provided by either request attribute).
      *
      * Example:
      *

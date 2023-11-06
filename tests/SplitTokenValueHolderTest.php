@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace Rollerworks\Component\SplitToken\Tests;
 
-use DateTimeImmutable;
 use Doctrine\Instantiator\Instantiator;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Rollerworks\Component\SplitToken\SplitTokenValueHolder;
 
@@ -23,7 +23,7 @@ final class SplitTokenValueHolderTest extends TestCase
     private const SELECTOR = '1zUeXUvr4LKymANBB_bLEqiP5GPr-Pha';
     private const VERIFIER = '_OR6OOnV1o8Vy_rWhDoxKNIt';
 
-    /** @test */
+    #[Test]
     public function its_empty_when_instantiated_from_storage(): void
     {
         $instance = $this->createHolderInstance();
@@ -41,7 +41,7 @@ final class SplitTokenValueHolderTest extends TestCase
         return (new Instantiator())->instantiate(SplitTokenValueHolder::class);
     }
 
-    /** @test */
+    #[Test]
     public function its_not_empty_with_data(): void
     {
         $instance = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER);
@@ -53,29 +53,38 @@ final class SplitTokenValueHolderTest extends TestCase
         self::assertFalse(SplitTokenValueHolder::isEmpty($instance));
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_to_replace_current(): void
     {
         self::assertTrue(SplitTokenValueHolder::mayReplaceCurrentToken($this->createHolderInstance()));
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_to_replace_current_token_when_expired(): void
     {
-        self::assertTrue(SplitTokenValueHolder::mayReplaceCurrentToken(new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER, new DateTimeImmutable('-100 seconds'))));
+        self::assertTrue(
+            SplitTokenValueHolder::mayReplaceCurrentToken(
+                new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER, new \DateTimeImmutable('-100 seconds'))
+            )
+        );
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_to_replace_current_token_when_metadata_mismatches(): void
     {
-        self::assertTrue(SplitTokenValueHolder::mayReplaceCurrentToken(new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER, null, ['foo' => 'me once']), ['shame' => 'on you']));
+        self::assertTrue(
+            SplitTokenValueHolder::mayReplaceCurrentToken(
+                new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER, null, ['foo' => 'me once']),
+                ['shame' => 'on you']
+            )
+        );
     }
 
-    /** @test */
+    #[Test]
     public function it_produces_a_new_object_when_changing_metadata(): void
     {
-        $current = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER, new DateTimeImmutable('+10 seconds'));
-        $second  = $current->withMetadata(['foo' => 'me twice']);
+        $current = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER, new \DateTimeImmutable('+10 seconds'));
+        $second = $current->withMetadata(['foo' => 'me twice']);
 
         self::assertNotSame($current, $second);
         self::assertEquals([], $current->metadata());
@@ -85,28 +94,28 @@ final class SplitTokenValueHolderTest extends TestCase
         self::assertEquals(['foo' => 'me twice'], $second->metadata());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_if_expired(): void
     {
         $instance = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER);
 
         self::assertFalse($instance->isExpired());
-        self::assertFalse($instance->isExpired(new DateTimeImmutable('+10 seconds')));
+        self::assertFalse($instance->isExpired(new \DateTimeImmutable('+10 seconds')));
 
-        $instance = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER, new DateTimeImmutable('+10 seconds'));
+        $instance = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER, new \DateTimeImmutable('+10 seconds'));
 
         self::assertFalse($instance->isExpired());
-        self::assertFalse($instance->isExpired(new DateTimeImmutable('-15 seconds')));
-        self::assertTrue($instance->isExpired(new DateTimeImmutable('+12 seconds')));
-        self::assertTrue($instance->isExpired(new DateTimeImmutable('+12 seconds')));
+        self::assertFalse($instance->isExpired(new \DateTimeImmutable('-15 seconds')));
+        self::assertTrue($instance->isExpired(new \DateTimeImmutable('+12 seconds')));
+        self::assertTrue($instance->isExpired(new \DateTimeImmutable('+12 seconds')));
     }
 
-    /** @test */
+    #[Test]
     public function it_equals_other_objects(): void
     {
-        $current        = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER);
-        $second         = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER);
-        $withExpiration = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER, new DateTimeImmutable('+5 seconds'));
+        $current = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER);
+        $second = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER);
+        $withExpiration = new SplitTokenValueHolder(self::SELECTOR, self::VERIFIER, new \DateTimeImmutable('+5 seconds'));
 
         self::assertTrue($current->equals($second));
         self::assertTrue($current->equals($current));
