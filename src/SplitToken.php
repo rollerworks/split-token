@@ -98,7 +98,7 @@ abstract class SplitToken
     private ?string $verifierHash = null;
     private ?\DateTimeImmutable $expiresAt = null;
 
-    final private function __construct(HiddenString $token, string $selector, string $verifier)
+    final private function __construct(HiddenString $token, string $selector, #[\SensitiveParameter] string $verifier)
     {
         $this->token = $token;
         $this->selector = $selector;
@@ -150,7 +150,7 @@ abstract class SplitToken
      *
      * Note: The provided $token is zeroed from memory when it's length is valid.
      */
-    final public static function fromString(string | HiddenString | \Stringable $token): static
+    final public static function fromString(#[\SensitiveParameter] string | HiddenString | \Stringable $token): static
     {
         if ($token instanceof HiddenString) {
             $token = $token->getString();
@@ -259,5 +259,5 @@ abstract class SplitToken
     abstract protected function verifyHash(string $hash, string $verifier): bool;
 
     /** Produces a hashed version of the verifier. */
-    abstract protected function hashVerifier(string $verifier): string;
+    abstract protected function hashVerifier(#[\SensitiveParameter] string $verifier): string;
 }

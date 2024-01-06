@@ -46,5 +46,5 @@ interface SplitTokenFactory
      * return SplitToken::fromString($token);
      * ```
      */
-    public function fromString(string | HiddenString | \Stringable $token): SplitToken;
+    public function fromString(#[\SensitiveParameter] string | HiddenString | \Stringable $token): SplitToken;
 }
