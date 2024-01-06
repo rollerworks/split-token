@@ -40,7 +40,7 @@ final class Argon2SplitTokenFactory extends AbstractSplitTokenFactory
         return $splitToken->expireAt($this->getExpirationTimestamp($expiresAt));
     }
 
-    public function fromString(string $token): SplitToken
+    public function fromString(#[\SensitiveParameter] string | HiddenString | \Stringable $token): SplitToken
     {
         return Argon2SplitToken::fromString($token);
     }

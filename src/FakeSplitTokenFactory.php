@@ -43,7 +43,7 @@ final class FakeSplitTokenFactory extends AbstractSplitTokenFactory
             ->expireAt($this->getExpirationTimestamp($expiresAt));
     }
 
-    public function fromString(string $token): SplitToken
+    public function fromString(string | HiddenString | \Stringable $token): SplitToken
     {
         return FakeSplitToken::fromString($token);
     }

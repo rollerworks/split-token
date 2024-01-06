@@ -1,6 +1,12 @@
 UPGRADE
 =======
 
+## Upgrade from 1.0.0-BETA1
+
+* The `Rollerworks\Component\SplitToken\SplitTokenFactory::fromString()` method
+  now also accepts a `Stringable` object or `HiddenString`. Unless a custom factory
+  implementation is used this should not effect your code.
+
 ## Upgrade from 0.1.2
 
 * Support for PHP 8.1 and lower was dropped;

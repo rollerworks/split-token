@@ -100,4 +100,36 @@ final class FakeSplitTokenFactoryTest extends TestCase
         self::assertTrue($splitTokenFromString->matches($splitToken->toValueHolder()));
         self::assertTrue($splitTokenFromString2->matches($splitToken->toValueHolder()));
     }
+
+    #[Test]
+    public function it_creates_from_hidden_string(): void
+    {
+        $factory = new FakeSplitTokenFactory();
+        $splitToken = $factory->generate();
+
+        $splitTokenFromString = $factory->fromString($splitToken->token());
+        self::assertTrue($splitTokenFromString->matches($splitToken->toValueHolder()));
+    }
+
+    #[Test]
+    public function it_creates_from_stringable_object(): void
+    {
+        $factory = new FakeSplitTokenFactory();
+        $splitToken = $factory->generate();
+
+        $stringObj = new class($splitToken->token()->getString()) implements \Stringable {
+            public function __construct(
+                #[\SensitiveParameter]
+                private string $value
+            ) {}
+
+            public function __toString(): string
+            {
+                return $this->value;
+            }
+        };
+
+        $splitTokenFromString = $factory->fromString($stringObj);
+        self::assertTrue($splitTokenFromString->matches($splitToken->toValueHolder()));
+    }
 }
