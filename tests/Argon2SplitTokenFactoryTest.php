@@ -71,9 +71,37 @@ final class Argon2SplitTokenFactoryTest extends TestCase
     {
         $factory = new Argon2SplitTokenFactory();
         $splitToken = $factory->generate();
-        $fullToken = $splitToken->token()->getString();
-        $splitTokenFromString = $factory->fromString($fullToken);
 
+        $splitTokenFromString = $factory->fromString($splitToken->token()->getString());
+        self::assertTrue($splitTokenFromString->matches($splitToken->toValueHolder()));
+    }
+
+    #[Test]
+    public function it_creates_from_hidden_string(): void
+    {
+        $factory = new Argon2SplitTokenFactory();
+        $splitToken = $factory->generate();
+
+        $splitTokenFromString = $factory->fromString($splitToken->token());
+        self::assertTrue($splitTokenFromString->matches($splitToken->toValueHolder()));
+    }
+
+    #[Test]
+    public function it_creates_from_stringable_object(): void
+    {
+        $factory = new Argon2SplitTokenFactory();
+        $splitToken = $factory->generate();
+
+        $stringObj = new class($splitToken->token()->getString()) implements \Stringable {
+            public function __construct(private string $value) {}
+
+            public function __toString(): string
+            {
+                return $this->value;
+            }
+        };
+
+        $splitTokenFromString = $factory->fromString($stringObj);
         self::assertTrue($splitTokenFromString->matches($splitToken->toValueHolder()));
     }
 }

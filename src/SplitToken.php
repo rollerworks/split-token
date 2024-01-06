@@ -150,8 +150,14 @@ abstract class SplitToken
      *
      * Note: The provided $token is zeroed from memory when it's length is valid.
      */
-    final public static function fromString(string $token): static
+    final public static function fromString(string | HiddenString | \Stringable $token): static
     {
+        if ($token instanceof HiddenString) {
+            $token = $token->getString();
+        }
+
+        $token = (string) $token;
+
         if (Binary::safeStrlen($token) !== self::TOKEN_CHAR_LENGTH) {
             // Don't zero memory as the value is invalid.
             throw new \RuntimeException('Invalid token provided.');
