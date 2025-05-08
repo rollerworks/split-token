@@ -31,10 +31,10 @@ final class SplitTokenValueHolder
     private ?string $verifierHash = null;
     private ?\DateTimeImmutable $expiresAt = null;
     /** @var array<string, scalar> */
-    private array $metadata = [];
+    private ?array $metadata = [];
 
     /** @param array<string, scalar> $metadata */
-    public function __construct(string $selector, string $verifierHash, \DateTimeImmutable $expiresAt = null, array $metadata = [])
+    public function __construct(string $selector, string $verifierHash, ?\DateTimeImmutable $expiresAt = null, array $metadata = [])
     {
         $this->selector = $selector;
         $this->verifierHash = $verifierHash;
@@ -100,7 +100,7 @@ final class SplitTokenValueHolder
         return $this->metadata ?? [];
     }
 
-    public function isExpired(\DateTimeImmutable $now = null): bool
+    public function isExpired(?\DateTimeImmutable $now = null): bool
     {
         if ($this->expiresAt === null) {
             return false;

@@ -8,6 +8,8 @@ declare(strict_types=1);
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+namespace Rollerworks\Component\SplitToken\Tests;
+
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Rollerworks\Component\SplitToken\FakeSplitTokenFactory;
@@ -120,8 +122,9 @@ final class FakeSplitTokenFactoryTest extends TestCase
         $stringObj = new class($splitToken->token()->getString()) implements \Stringable {
             public function __construct(
                 #[\SensitiveParameter]
-                private string $value
-            ) {}
+                private string $value,
+            ) {
+            }
 
             public function __toString(): string
             {

@@ -18,7 +18,7 @@ abstract class AbstractSplitTokenFactory implements SplitTokenFactory
     private ?\DateInterval $defaultLifeTime = null;
     private ?ClockInterface $clock;
 
-    public function __construct(\DateInterval | string $defaultLifeTime = null)
+    public function __construct(\DateInterval | string | null $defaultLifeTime = null)
     {
         if (\is_string($defaultLifeTime)) {
             $defaultLifeTime = new \DateInterval($defaultLifeTime);
@@ -33,7 +33,7 @@ abstract class AbstractSplitTokenFactory implements SplitTokenFactory
         $this->clock = $clock;
     }
 
-    final protected function getExpirationTimestamp(\DateTimeImmutable | \DateInterval $expiration = null): ?\DateTimeImmutable
+    final protected function getExpirationTimestamp(\DateTimeImmutable | \DateInterval | null $expiration = null): ?\DateTimeImmutable
     {
         if ($expiration instanceof \DateTimeImmutable) {
             return $expiration;

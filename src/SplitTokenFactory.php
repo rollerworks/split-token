@@ -34,7 +34,7 @@ interface SplitTokenFactory
      *
      * @see HiddenString
      */
-    public function generate(\DateTimeImmutable | \DateInterval $expiresAt = null): SplitToken;
+    public function generate(\DateTimeImmutable | \DateInterval | null $expiresAt = null): SplitToken;
 
     /**
      * Recreates a SplitToken object from a token-string
