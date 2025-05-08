@@ -119,7 +119,7 @@ abstract class SplitToken
 
         if (Binary::safeStrlen($bytesString) !== self::TOKEN_DATA_LENGTH) {
             // Don't zero memory as the value is invalid.
-            throw new \RuntimeException(sprintf('Invalid token-data provided, expected exactly %s bytes.', self::TOKEN_DATA_LENGTH));
+            throw new \RuntimeException(\sprintf('Invalid token-data provided, expected exactly %s bytes.', self::TOKEN_DATA_LENGTH));
         }
 
         $selector = Base64UrlSafe::encode(Binary::safeSubstr($bytesString, 0, self::SELECTOR_BYTES));
@@ -137,7 +137,7 @@ abstract class SplitToken
         return $instance;
     }
 
-    public function expireAt(\DateTimeImmutable $expiresAt = null): static
+    public function expireAt(?\DateTimeImmutable $expiresAt = null): static
     {
         $instance = clone $this;
         $instance->expiresAt = $expiresAt;

@@ -24,12 +24,12 @@ use ParagonIE\HiddenString\HiddenString;
 final class Argon2SplitTokenFactory extends AbstractSplitTokenFactory
 {
     /** @param array<string, int> $config */
-    public function __construct(private array $config = [], \DateInterval | string $defaultLifeTime = null)
+    public function __construct(private array $config = [], \DateInterval | string | null $defaultLifeTime = null)
     {
         parent::__construct($defaultLifeTime);
     }
 
-    public function generate(\DateTimeImmutable | \DateInterval $expiresAt = null): SplitToken
+    public function generate(\DateTimeImmutable | \DateInterval | null $expiresAt = null): SplitToken
     {
         $splitToken = Argon2SplitToken::create(
             // DO NOT ENCODE HERE (always provide as raw binary)!

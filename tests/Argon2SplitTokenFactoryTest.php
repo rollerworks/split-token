@@ -93,7 +93,9 @@ final class Argon2SplitTokenFactoryTest extends TestCase
         $splitToken = $factory->generate();
 
         $stringObj = new class($splitToken->token()->getString()) implements \Stringable {
-            public function __construct(private string $value) {}
+            public function __construct(private string $value)
+            {
+            }
 
             public function __toString(): string
             {
