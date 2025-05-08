@@ -10,8 +10,10 @@ parameters:
         - ./tests
     excludePaths:
         - var/
-        - templates/
-        - translations/
 
     ignoreErrors:
-        - '#Attribute class Symfony\\Contracts\\Service\\Attribute\\Required does not exist#' # Not required
+        # Not required
+        - '#Attribute class Symfony\\Contracts\\Service\\Attribute\\Required does not exist#'
+
+         # Always set, as it's only NULL after zeroing, which happens later
+        - '#Parameter \#1 \$verifier of method Rollerworks\\Component\\SplitToken\\SplitToken\:\:hashVerifier\(\) expects string, string\|null given#'

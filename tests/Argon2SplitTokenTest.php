@@ -167,6 +167,17 @@ final class Argon2SplitTokenTest extends TestCase
     }
 
     #[Test]
+    public function it_fails_matches_when_just_created(): void
+    {
+        $splitToken = SplitToken::create(self::$randValue);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('matches() does not work with a SplitToken object when created with create(), use fromString() instead.');
+
+        $splitToken->matches($splitToken->toValueHolder());
+    }
+
+    #[Test]
     public function it_verifies_split_token(): void
     {
         // Stored.
