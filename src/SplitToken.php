@@ -94,7 +94,7 @@ abstract class SplitToken
     protected array $config = [];
     private HiddenString $token;
     private string $selector;
-    private string $verifier;
+    private ?string $verifier;
     private ?string $verifierHash = null;
     private ?\DateTimeImmutable $expiresAt = null;
 
@@ -201,6 +201,10 @@ abstract class SplitToken
 
         if ($token->isExpired() || $token->selector() !== $this->selector) {
             return false;
+        }
+
+        if ($this->verifier === null) {
+            throw new \RuntimeException('matches() does not work with a SplitToken object when created with create(), use fromString() instead.');
         }
 
         return $this->verifyHash($token->verifierHash(), $this->verifier);
